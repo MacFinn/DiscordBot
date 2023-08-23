@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Initium <https://www.github.com/zorroware/initium>
+  ~ Copyright (C) 2021 Zorroware
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program. If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<!-- Based on answers from the following StackOverflow post: https://stackoverflow.com/q/21206993 -->
+<Configuration status="INFO">
+    <Properties>
+        <!-- Directory for log files -->
+        <Property name="logPath">logs</Property>
+        <!-- Prefix used for log file names -->
+        <Property name="rollingFileName">initium</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- Console output -->
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-20.-20c{1}] - %highlight{%level} - %msg%n" />
+        </Console>
+
+        <!-- Log file output -->
+        <RollingFile name="rollingFile" immediateFlush="false" fileName="${logPath}/${rollingFileName}.log" filePattern="${logPath}/${rollingFileName}.%i.log.gz">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-20.-20c{1}] - %level - %msg%n" />
+            <Policies>
+                <!-- Create a new log file when starting up -->
+                <OnStartupTriggeringPolicy />
+                <!-- Create a new log file when it reaches a set size -->
+                <SizeBasedTriggeringPolicy size="100 KB" />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="INFO" additivity="false">
+            <!-- Execute both outputs -->
+            <AppenderRef ref="console" />
+            <AppenderRef ref="rollingFile" />
+        </Root>
+    </Loggers>
+</Configuration>
